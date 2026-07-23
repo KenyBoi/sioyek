@@ -61,6 +61,11 @@ h2 {
   font-size: 14pt;
 }
 
+/* Keep each documented visual pattern together with its diagram or table. */
+h2[id^="pattern-"] {
+  break-before: page;
+}
+
 h3 {
   margin-top: 0.16in;
   font-size: 11pt;
@@ -161,7 +166,8 @@ img {
 
 img.mermaid-rendered {
   width: 100%;
-  max-height: none;
+  max-height: 6.35in;
+  object-fit: contain;
   padding: 0.06in;
   border: 1px solid var(--border);
   background: #ffffff;

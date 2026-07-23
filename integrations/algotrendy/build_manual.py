@@ -139,6 +139,9 @@ def main() -> int:
     html = output_dir / "AlgoTrendy-User-Manual.html"
     artifact.unlink(missing_ok=True)
     html.unlink(missing_ok=True)
+    assets = source_root / "assets"
+    if assets.is_dir():
+        shutil.copytree(assets, output_dir / "assets", dirs_exist_ok=True)
     css = Path(__file__).with_name("manual.css").resolve()
     pandoc = executable(args.pandoc, "pandoc")
     chrome = args.chrome or "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
