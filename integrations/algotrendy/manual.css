@@ -1,0 +1,170 @@
+/* AlgoTrendy manual print theme.
+ * Source palette: AlgoTrendy DESIGN_SYSTEM.md and terminal/tokens.css.
+ * The PDF uses a readable paper surface while retaining graphite evidence cards.
+ */
+
+@page {
+  size: Letter;
+  margin: 0.72in 0.68in 0.78in;
+}
+
+:root {
+  --paper: #f7f7f6;
+  --ink: #202020;
+  --muted: #5f6368;
+  --graphite-0: #161616;
+  --graphite-1: #1d1d1d;
+  --graphite-2: #242424;
+  --graphite-3: #2b2b2b;
+  --border: #d8d8d5;
+  --info: #5d6670;
+  --bullish: #167d70;
+  --bearish: #b52e3a;
+  --warning: #8b6900;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  max-width: 7.1in;
+  margin: 0 auto;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.52;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--graphite-0);
+  line-height: 1.18;
+  break-after: avoid;
+}
+
+h1 {
+  margin-top: 0;
+  padding-bottom: 0.16in;
+  border-bottom: 4px solid var(--graphite-0);
+  font-size: 25pt;
+  letter-spacing: -0.3pt;
+}
+
+h2 {
+  margin-top: 0.32in;
+  padding-bottom: 0.06in;
+  border-bottom: 1px solid var(--border);
+  font-size: 17pt;
+}
+
+h3 {
+  margin-top: 0.22in;
+  font-size: 13pt;
+}
+
+p,
+ul,
+ol,
+table,
+blockquote,
+pre {
+  orphans: 3;
+  widows: 3;
+}
+
+a {
+  color: #304c67;
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+}
+
+code,
+pre,
+table code {
+  font-family: "SF Mono", "Menlo", monospace;
+}
+
+code {
+  padding: 0.08em 0.26em;
+  border: 1px solid #e1e1de;
+  border-radius: 3px;
+  background: #ededeb;
+  font-size: 0.9em;
+}
+
+pre {
+  padding: 0.13in 0.16in;
+  overflow-wrap: anywhere;
+  border: 1px solid #3c3c3c;
+  border-left: 4px solid var(--graphite-0);
+  border-radius: 3px;
+  background: var(--graphite-1);
+  color: #e1e1e1;
+  font-size: 8.3pt;
+  line-height: 1.42;
+}
+
+blockquote {
+  margin: 0.16in 0;
+  padding: 0.08in 0.16in;
+  border-left: 4px solid var(--info);
+  background: #eceeed;
+  color: #3f4449;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+}
+
+th,
+td {
+  padding: 0.07in 0.08in;
+  border: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th {
+  background: #e6e7e5;
+  color: var(--graphite-0);
+  font-weight: 700;
+  text-align: left;
+}
+
+tr {
+  break-inside: avoid;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  max-height: 6.2in;
+  margin: 0.16in auto;
+  break-inside: avoid;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 0.28in 0;
+}
+
+li {
+  margin: 0.04in 0;
+}
+
+.title,
+.author,
+.date {
+  color: var(--muted);
+}
+
+.title {
+  color: var(--graphite-0);
+  font-weight: 700;
+}

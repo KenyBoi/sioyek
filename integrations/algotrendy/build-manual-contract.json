@@ -1,0 +1,9 @@
+{
+  "source_repository": "KenyBoi/AlgoTrendy-v6",
+  "source_path": "docs/user/README.md",
+  "source_revision": "<40-character commit SHA>",
+  "artifact": "AlgoTrendy-User-Manual.pdf",
+  "sha256": "<64 lowercase hexadecimal characters>",
+  "artifact_kind": "generated-derived-document",
+  "verification_rule": "The launcher opens only when the PDF SHA-256 equals this manifest value."
+}

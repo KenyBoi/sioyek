@@ -1,0 +1,6 @@
+# Copy the installed, generated version of this file to Sioyek's user config.
+# The absolute launcher path is intentionally generated during installation.
+# It must not be replaced with a shell command containing selected PDF text.
+
+# Example generated entry:
+# new_command _open_algotrendy_manual /absolute/path/open_manual.py /absolute/path/AlgoTrendy-User-Manual.pdf /absolute/path/AlgoTrendy-User-Manual.manifest.json --sioyek /absolute/path/sioyek

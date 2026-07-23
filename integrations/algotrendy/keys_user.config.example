@@ -1,0 +1,4 @@
+# Open the verified AlgoTrendy manual from Sioyek's command palette binding.
+# The command itself is generated in prefs_user.config during installation.
+# `gm` is intentionally mnemonic and does not replace core navigation keys.
+# _open_algotrendy_manual gm
