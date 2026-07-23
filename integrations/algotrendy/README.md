@@ -33,9 +33,11 @@ python3 /path/to/sioyek/integrations/algotrendy/build_manual.py \
   --source-revision "$(git -C /path/to/AlgoTrendy-v6 rev-parse HEAD)"
 ```
 
-The builder uses an explicit source-page allowlist and emits the PDF plus its
-manifest together. Do not replace the revision with a mutable branch or
-`latest` URL.
+The builder uses an explicit source-page allowlist, renders Mermaid fences with
+pinned Mermaid CLI `11.16.0`, and emits the PDF plus its manifest together. If
+the local CLI is unavailable, `--mermaid-ink` is an explicit fallback that sends
+diagram source to mermaid.ink; use it only for approved non-sensitive manuals.
+Do not replace the revision with a mutable branch or `latest` URL.
 
 ## UX/UI direction
 

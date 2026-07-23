@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import base64
+import html as html_lib
 import hashlib
 import json
 import re
@@ -35,6 +37,9 @@ SOURCE_FILES = (
     "lakehouse_popos_runpod_fallback.md",
 )
 SHA_RE = re.compile(r"[0-9a-f]{40}\Z")
+MERMAID_BLOCK_RE = re.compile(
+    r'<pre class="mermaid"><code>(?P<source>.*?)</code></pre>', re.DOTALL
+)
 
 
 def sha256(path: Path) -> str:
@@ -49,6 +54,60 @@ def executable(value: str | None, fallback: str) -> str:
     return value or shutil.which(fallback) or fallback
 
 
+def render_mermaid_blocks(
+    document: Path, output_dir: Path, mmdc_value: str | None, use_mermaid_ink: bool
+) -> None:
+    source = document.read_text(encoding="utf-8")
+    matches = list(MERMAID_BLOCK_RE.finditer(source))
+    if not matches:
+        return
+
+    mermaid_dir = output_dir / "mermaid"
+    mermaid_dir.mkdir(parents=True, exist_ok=True)
+    if mmdc_value and use_mermaid_ink:
+        raise SystemExit("choose either --mmdc or --mermaid-ink, not both")
+    mmdc = mmdc_value or shutil.which("mmdc")
+    command_prefix = [mmdc] if mmdc else [executable(None, "npx"), "--yes", "@mermaid-js/mermaid-cli@11.16.0"]
+    replacements: list[tuple[int, int, str]] = []
+    for index, match in enumerate(matches, start=1):
+        diagram_source = html_lib.unescape(match.group("source"))
+        source_path = mermaid_dir / f"diagram-{index:02d}.mmd"
+        svg_path = mermaid_dir / f"diagram-{index:02d}.svg"
+        source_path.write_text(diagram_source, encoding="utf-8")
+        if use_mermaid_ink:
+            encoded = base64.urlsafe_b64encode(diagram_source.encode("utf-8")).decode("ascii").rstrip("=")
+            subprocess.run(
+                ["curl", "-fsSL", f"https://mermaid.ink/svg/{encoded}", "-o", str(svg_path)],
+                check=True,
+                stdout=subprocess.DEVNULL,
+            )
+        else:
+            subprocess.run(
+                [
+                    *command_prefix,
+                    "-i",
+                    str(source_path),
+                    "-o",
+                    str(svg_path),
+                    "-b",
+                    "transparent",
+                    "-t",
+                    "neutral",
+                ],
+                check=True,
+                stdout=subprocess.DEVNULL,
+            )
+        replacement = (
+            f'<img class="mermaid-rendered" src="mermaid/{svg_path.name}" '
+            f'alt="Mermaid diagram {index}">'
+        )
+        replacements.append((match.start(), match.end(), replacement))
+
+    for start, end, replacement in reversed(replacements):
+        source = source[:start] + replacement + source[end:]
+    document.write_text(source, encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-root", type=Path, required=True, help="AlgoTrendy docs/user directory")
@@ -56,6 +115,12 @@ def main() -> int:
     parser.add_argument("--source-revision", required=True, help="40-character source commit SHA")
     parser.add_argument("--source-repository", default="KenyBoi/AlgoTrendy-v6")
     parser.add_argument("--pandoc")
+    parser.add_argument("--mmdc", help="Mermaid CLI executable; defaults to mmdc or pinned npx package")
+    parser.add_argument(
+        "--mermaid-ink",
+        action="store_true",
+        help="render diagrams through mermaid.ink; sends diagram source to that service",
+    )
     parser.add_argument("--chrome", help="Chrome executable used for deterministic PDF export")
     args = parser.parse_args()
 
@@ -102,6 +167,7 @@ def main() -> int:
         ],
         check=True,
     )
+    render_mermaid_blocks(html, output_dir, args.mmdc, args.mermaid_ink)
 
     with tempfile.TemporaryDirectory(prefix="algotrendy-chrome-") as profile:
         process = subprocess.Popen(
